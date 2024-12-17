@@ -1,0 +1,21 @@
+% Definisikan fungsi objektif
+function f = objectiveFunction(x)
+    f = x^2 + 4*x + 4; % Fungsi yang ingin diminimalkan
+end
+
+% Definisikan kendala (jika ada)
+function [c, ceq] = constraints(x)
+    c = -x; % Kendala x >= 0 (dalam bentuk c(x) <= 0)
+    ceq = []; % Tidak ada kendala persamaan
+end
+
+% Nilai tebakan awal
+x0 = 0; % Mulai dari nilai x = 0
+
+% Menjalankan proses optimisasi
+options = optimoptions('fmincon','Display','iter'); % Opsi untuk menampilkan iterasi
+[x_optimal, fval] = fmincon(@objectiveFunction, x0, [], [], [], [], [], [], @constraints, options);
+
+% Menampilkan hasil
+fprintf('Nilai optimal x: %.4f\n', x_optimal);
+fprintf('Nilai minimum dari fungsi objektif: %.4f\n', fval);
