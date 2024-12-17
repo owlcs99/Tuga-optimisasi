@@ -1,0 +1,18 @@
+% Definisikan koefisien fungsi objektif
+f = [-3 -5]; % Negatif karena linprog meminimalkan
+
+% Definisikan matriks kendala A dan vektor batas b
+A = [1 2; 2 1]; % Koefisien kendala
+b = [10; 8];    % Batas kendala
+
+% Definisikan batas bawah dan atas untuk variabel x
+lb = [0; 0];    % Batas bawah (x1, x2 >= 0)
+ub = [];        % Tidak ada batas atas
+
+% Menjalankan optimisasi
+[x_optimal, fval] = linprog(f, A, b, [], [], lb, ub);
+
+% Menampilkan hasil
+fprintf('Nilai optimal x1: %.4f\n', x_optimal(1));
+fprintf('Nilai optimal x2: %.4f\n', x_optimal(2));
+fprintf('Nilai maksimum Z: %.4f\n', -fval); % Negatif karena kita minimalkan
