@@ -1,0 +1,27 @@
+% Menggunakan MATLAB untuk Optimisasi
+
+% Definisikan fungsi objektif
+function f = objectiveFunction(x)
+    % Misalkan kita ingin meminimalkan fungsi f(x) = x1^2 + x2^2
+    f = x(1)^2 + x(2)^2;
+end
+
+% Tentukan tebakan awal
+x0 = [1, 1]; % Tebakan awal untuk x1 dan x2
+
+% Tentukan batasan (constraints) jika ada
+A = []; % Tidak ada batasan linear
+b = []; % Tidak ada batasan linear
+Aeq = []; % Tidak ada batasan persamaan linear
+beq = []; % Tidak ada batasan persamaan linear
+lb = [0, 0]; % Batas bawah untuk x1 dan x2
+ub = []; % Tidak ada batas atas
+
+% Jalankan proses optimasi menggunakan fmincon
+[x_opt, fval] = fmincon(@objectiveFunction, x0, A, b, Aeq, beq, lb, ub);
+
+% Tampilkan hasil optimasi
+disp('Nilai optimal:');
+disp(x_opt);
+disp('Nilai fungsi objektif pada titik optimal:');
+disp(fval);
