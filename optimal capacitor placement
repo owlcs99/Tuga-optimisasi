@@ -1,0 +1,78 @@
+%%writefile add.m
+function optimal_capacitor_placement()
+    % Parameter sistem
+    num_buses = 20; % Jumlah bus dalam sistem
+    max_capacity = 100; % Kapasitas maksimum kapasitor dalam kVAr
+    population_size = 20; % Ukuran populasi untuk GA
+    generations = 50; % Jumlah generasi
+
+    % Membuat populasi awal
+    population = randi([0, max_capacity], population_size, num_buses);
+
+    for gen = 1:generations
+        fitness = evaluate_fitness(population);
+        selected = selection(population, fitness);
+        offspring = crossover(selected);
+        population = mutation(offspring);
+    end
+
+    % Menampilkan hasil terbaik
+    best_solution = population(find(fitness == max(fitness), 1), :);
+    fprintf('Optimal Capacitor Sizes (kVAr):\n');
+    disp(best_solution);
+end
+
+function fitness = evaluate_fitness(population)
+    % Fungsi untuk mengevaluasi fitness dari setiap individu dalam populasi
+    fitness = zeros(size(population, 1), 1);
+
+    for i = 1:size(population, 1)
+        % Contoh perhitungan kehilangan daya (power loss)
+        % Anda dapat mengganti dengan model yang lebih kompleks sesuai kebutuhan
+        fitness(i) = calculate_power_loss(population(i, :));
+    end
+end
+
+function loss = calculate_power_loss(capacitor_sizes)
+    % Fungsi dummy untuk menghitung kehilangan daya berdasarkan ukuran kapasitor
+    % Gantilah dengan perhitungan yang sesuai dengan model sistem Anda
+    loss = sum(capacitor_sizes.^2); % Contoh sederhana: kehilangan daya proporsional dengan kuadrat ukuran kapasitor
+end
+
+function selected = selection(population, fitness)
+    % Pemilihan individu berdasarkan fitness menggunakan metode roulette wheel selection
+    total_fitness = sum(fitness);
+    probabilities = fitness / total_fitness;
+
+    selected_indices = randsample(1:size(population, 1), size(population, 1), true, probabilities);
+    selected = population(selected_indices, :);
+end
+
+function offspring = crossover(selected)
+    % Crossover antar individu terpilih untuk menghasilkan keturunan baru
+    [num_individuals, num_genes] = size(selected);
+    offspring = zeros(num_individuals, num_genes);
+
+    for i = 1:2:num_individuals-1
+        crossover_point = randi([1, num_genes-1]);
+        offspring(i, :) = [selected(i, 1:crossover_point), selected(i+1, crossover_point+1:end)];
+        offspring(i+1, :) = [selected(i+1, 1:crossover_point), selected(i, crossover_point+1:end)];
+    end
+end
+
+function mutated_population = mutation(population)
+    % Mutasi individu dalam populasi dengan probabilitas tertentu
+    mutation_rate = 0.01; % Tingkat mutasi
+
+    for i = 1:size(population, 1)
+        if rand < mutation_rate
+            mutation_point = randi(size(population, 2));
+            population(i, mutation_point) = randi([0, max_capacity]);
+        end
+    end
+
+    mutated_population = population;
+end
+
+% Menjalankan fungsi utama
+% optimal_capacitor_placement();
