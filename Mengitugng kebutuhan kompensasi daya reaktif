@@ -1,0 +1,24 @@
+%%writefile add.m
+% Input daya aktif (P) dan daya reaktif (Q)
+P = input('Masukkan daya aktif (kW): '); % Daya aktif dalam kW
+Q = input('Masukkan daya reaktif (kVAr): '); % Daya reaktif dalam kVAr
+
+% Menghitung sudut fase
+theta = atan(Q / P); % Sudut fase dalam radian
+
+% Menghitung faktor daya sebelum koreksi
+pf_before = cos(theta); % Faktor daya sebelum koreksi
+
+% Menghitung daya semu (S)
+S = sqrt(P^2 + Q^2); % Daya semu dalam kVA
+
+% Menentukan target faktor daya setelah koreksi
+target_pf = input('Masukkan target faktor daya (misal 0.9): ');
+
+% Menghitung kebutuhan kapasitas kapasitor bank (Qc)
+Qc = P * (tan(acos(target_pf)) - tan(theta)); % Kapasitas dalam kVAr
+
+% Menampilkan hasil
+fprintf('Faktor Daya Sebelum Koreksi: %.2f\n', pf_before);
+fprintf('Daya Semu: %.2f kVA\n', S);
+fprintf('Kapasitas yang dibutuhkan untuk kapasitor bank: %.2f kVAr\n', Qc);
